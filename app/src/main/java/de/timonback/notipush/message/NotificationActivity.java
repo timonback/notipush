@@ -2,6 +2,7 @@ package de.timonback.notipush.message;
 
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -85,6 +86,16 @@ public class NotificationActivity extends AppCompatActivity implements FirebaseA
         mMessages = (RecyclerView) findViewById(R.id.messagesList);
         mMessages.setHasFixedSize(false);
         mMessages.setLayoutManager(mManager);
+
+        final SwipeRefreshLayout mRefresh = (SwipeRefreshLayout) findViewById(R.id.swiperefresh);
+        mRefresh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                attachRecyclerViewAdapter();
+
+                mRefresh.setRefreshing(false);
+            }
+        });
     }
 
     @Override
