@@ -12,7 +12,7 @@
  * limitations under the License.
  */
 
-package de.timonback.notipush.components.listview;
+package de.timonback.notipush.util.listview;
 
 import android.app.Activity;
 import android.support.annotation.LayoutRes;
@@ -52,11 +52,10 @@ import com.google.firebase.database.Query;
  */
 public abstract class FirebaseListAdapter<T> extends BaseAdapter {
     private static final String TAG = "FirebaseListAdapter";
-
-    private FirebaseArray mSnapshots;
     private final Class<T> mModelClass;
     protected Activity mActivity;
     protected int mLayout;
+    private FirebaseArray mSnapshots;
 
     FirebaseListAdapter(Activity activity,
                         Class<T> modelClass,

@@ -1,4 +1,4 @@
-package de.timonback.notipush.components.listview;
+package de.timonback.notipush.util.listview;
 
 import android.app.Activity;
 import android.support.annotation.LayoutRes;

@@ -12,7 +12,7 @@
  * limitations under the License.
  */
 
-package de.timonback.notipush.components.listview;
+package de.timonback.notipush.util.listview;
 
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;

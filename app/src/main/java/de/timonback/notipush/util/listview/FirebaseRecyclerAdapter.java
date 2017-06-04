@@ -12,7 +12,7 @@
  * limitations under the License.
  */
 
-package de.timonback.notipush.components.listview;
+package de.timonback.notipush.util.listview;
 
 import android.support.annotation.LayoutRes;
 import android.support.v7.widget.RecyclerView;
@@ -77,11 +77,10 @@ import java.lang.reflect.InvocationTargetException;
 public abstract class FirebaseRecyclerAdapter<T, VH extends RecyclerView.ViewHolder>
         extends RecyclerView.Adapter<VH> {
     private static final String TAG = "FirebaseRecyclerAdapter";
-
-    private FirebaseArray mSnapshots;
-    private Class<T> mModelClass;
     protected Class<VH> mViewHolderClass;
     protected int mModelLayout;
+    private FirebaseArray mSnapshots;
+    private Class<T> mModelClass;
 
     FirebaseRecyclerAdapter(Class<T> modelClass,
                             @LayoutRes int modelLayout,

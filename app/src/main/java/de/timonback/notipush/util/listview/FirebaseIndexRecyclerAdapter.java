@@ -12,7 +12,7 @@
  * limitations under the License.
  */
 
-package de.timonback.notipush.components.listview;
+package de.timonback.notipush.util.listview;
 
 import android.support.annotation.LayoutRes;
 import android.support.v7.widget.RecyclerView;
