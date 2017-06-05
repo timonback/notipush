@@ -1,0 +1,14 @@
+
+  override:
+    # start the emulator
+    - emulator -avd circleci-android25 -no-window:
+        background: true
+        parallel: true
+    # wait for it to have booted
+    - circle-android wait-for-boot
+    # run tests  against the emulator.
+    - ./gradlew connectedAndroidTest
+    # copy the build outputs to artifacts
+    - cp -r my-project/build/outputs $CIRCLE_ARTIFACTS
+    # copy the test results to the test results directory.
+    - cp -r my-project/build/outputs/androidTest-results/* $CIRCLE_TEST_REPORTS
