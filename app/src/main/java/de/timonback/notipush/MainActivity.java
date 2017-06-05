@@ -16,6 +16,7 @@ import android.view.MenuItem;
 import de.timonback.notipush.component.EmptyFragment;
 import de.timonback.notipush.component.notification.NotificationFragment;
 import de.timonback.notipush.component.preference.PreferenceFragment;
+import de.timonback.notipush.service.notification.NotificationService;
 
 public class MainActivity extends AppCompatActivity {
     private static String TAG = MainActivity.class.getSimpleName();
@@ -118,6 +119,8 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void updateMainContent(Fragment fragment, String title) {
+        Log.i(TAG, NotificationService.getInstance().getTopics().toString());
+
         FragmentManager fragmentManager = getFragmentManager();
         fragmentManager.beginTransaction()
                 .replace(R.id.mainContent, fragment)

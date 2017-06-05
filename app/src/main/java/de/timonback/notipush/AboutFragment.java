@@ -21,7 +21,7 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.GetTokenResult;
 
-import de.timonback.notipush.service.AuthenticationService;
+import de.timonback.notipush.service.authentication.AuthenticationService;
 
 public class AboutFragment extends Fragment {
     public static final String TAG = AboutFragment.class.getSimpleName();

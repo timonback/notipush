@@ -10,18 +10,16 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 
 import de.timonback.notipush.R;
-import de.timonback.notipush.service.AuthenticationService;
+import de.timonback.notipush.service.authentication.AuthenticationService;
+import de.timonback.notipush.service.notification.NotificationService;
 import de.timonback.notipush.util.listview.FirebaseRecyclerAdapter;
 
 public class NotificationFragment extends Fragment {
     private static final String TAG = "RecyclerViewDemo";
 
-    private DatabaseReference mRef;
     private String currentRef = "chats";
 
     private RecyclerView mMessages;
@@ -48,8 +46,6 @@ public class NotificationFragment extends Fragment {
         super.onActivityCreated(savedInstanceState);
 
         AuthenticationService.getInstance().addAuthenticationSignedInListener(authenticationSignedInListener);
-
-        mRef = FirebaseDatabase.getInstance().getReference();
 
         mEmptyListMessage = (TextView) getActivity().findViewById(R.id.emptyTextView);
 
@@ -92,10 +88,10 @@ public class NotificationFragment extends Fragment {
     }
 
     private void reloadNotifications() {
-        DatabaseReference mChatRef = mRef.child(currentRef);
-        Query lastFifty = mChatRef.limitToLast(50);
+        Query query = NotificationService.getInstance().getLastNotifications(currentRef, 50);
+
         mAdapter = new FirebaseRecyclerAdapter<Notification, NotificationHolder>(
-                Notification.class, R.layout.message, NotificationHolder.class, lastFifty) {
+                Notification.class, R.layout.message, NotificationHolder.class, query) {
             @Override
             public void populateViewHolder(NotificationHolder holder, Notification chat, int position) {
                 holder.setMessage(chat.getMessage());
