@@ -32,7 +32,7 @@
             android:textAppearance="?android:attr/textAppearanceMedium" />
 
         <LinearLayout
-            android:id="@+id/version_layout"
+            android:id="@+id/app_version"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@id/app_name"
@@ -55,7 +55,7 @@
             android:id="@+id/author"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@id/version_layout"
+            android:layout_below="@id/app_version"
             android:layout_centerHorizontal="true"
             android:text="@string/about_author" />
 
@@ -69,6 +69,29 @@
             android:padding="8dp"
             android:text="@string/about_go_to_github"
             android:textAppearance="?android:attr/textAppearanceMedium" />
-    </RelativeLayout>
 
+        <LinearLayout
+            android:id="@+id/firebase"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/go_to_github"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/about_messaging_label"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/about_messaging"
+                android:textAlignment="center" />
+
+            <TextView
+                android:id="@+id/about_messaging"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textAlignment="center"
+                android:textSize="8sp"
+                tools:text="loading...." />
+        </LinearLayout>
+
+    </RelativeLayout>
 </ScrollView>

@@ -9,12 +9,19 @@ import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.util.Log;
 import android.util.Pair;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.GetTokenResult;
+
+import de.timonback.notipush.service.AuthenticationService;
 
 public class AboutFragment extends Fragment {
     public static final String TAG = AboutFragment.class.getSimpleName();
@@ -57,10 +64,18 @@ public class AboutFragment extends Fragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View rootView = inflater.inflate(R.layout.fragment_about, container, false);
+        final View rootView = inflater.inflate(R.layout.fragment_about, container, false);
 
         TextView version = (TextView) rootView.findViewById(R.id.version);
         version.setText(getAppVersionAndBuild(getActivity()).first);
+
+        AuthenticationService.getInstance().getCurrentUser().getToken(false).addOnCompleteListener(getActivity(), new OnCompleteListener<GetTokenResult>() {
+            @Override
+            public void onComplete(@NonNull Task<GetTokenResult> task) {
+                TextView messaging_id = (TextView) rootView.findViewById(R.id.about_messaging);
+                messaging_id.setText(task.getResult().getToken());
+            }
+        });
 
         TextView gotToGithub = (TextView) rootView.findViewById(R.id.go_to_github);
         gotToGithub.setOnClickListener(new View.OnClickListener() {
