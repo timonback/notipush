@@ -1,8 +1,6 @@
 package de.timonback.notipush.service;
 
 import android.app.Activity;
-import android.content.Context;
-import android.support.annotation.NonNull;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -10,19 +8,25 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import de.timonback.notipush.util.auth.SignInResultNotifier;
 
 public class AuthenticationService {
-    public interface AuthenticationSignedInListener {
-        void onSignedIn();
+    private static AuthenticationService INSTANCE;
+    private final FirebaseAuth mAuth;
+    private final List<AuthenticationSignedInListener> listeners = new ArrayList<>();
+
+    private AuthenticationService() {
+        mAuth = FirebaseAuth.getInstance();
     }
 
-    private final FirebaseAuth mAuth;
-    private final AuthenticationSignedInListener mListener;
-
-    public AuthenticationService(AuthenticationSignedInListener listener) {
-        mAuth = FirebaseAuth.getInstance();
-        mListener = listener;
+    public static synchronized AuthenticationService getInstance() {
+        if (INSTANCE == null) {
+            INSTANCE = new AuthenticationService();
+        }
+        return INSTANCE;
     }
 
     public void onStart(Activity activity) {
@@ -30,7 +34,7 @@ public class AuthenticationService {
         // sign in before attaching the RecyclerView adapter otherwise the Adapter will
         // not be able to read any data from the Database.
         if (isSignedIn()) {
-            mListener.onSignedIn();
+            fireOnSignedInListeners();
         } else {
             signInAnonymously(activity);
         }
@@ -46,7 +50,7 @@ public class AuthenticationService {
                 .addOnSuccessListener(activity, new OnSuccessListener<AuthResult>() {
                     @Override
                     public void onSuccess(AuthResult result) {
-                        mListener.onSignedIn();
+                        fireOnSignedInListeners();
                     }
                 })
                 .addOnCompleteListener(new SignInResultNotifier(activity));
@@ -56,11 +60,25 @@ public class AuthenticationService {
         return mAuth.getCurrentUser() != null;
     }
 
+    private void fireOnSignedInListeners() {
+        for (AuthenticationSignedInListener listener : listeners) {
+            listener.onSignedIn();
+        }
+    }
+
+    public void addAuthenticationSignedInListener(AuthenticationSignedInListener listener) {
+        listeners.add(listener);
+    }
+
     public void addAuthStateListener(FirebaseAuth.AuthStateListener listener) {
         mAuth.addAuthStateListener(listener);
     }
 
     public void removeAuthStateListener(FirebaseAuth.AuthStateListener listener) {
         mAuth.removeAuthStateListener(listener);
+    }
+
+    public interface AuthenticationSignedInListener {
+        void onSignedIn();
     }
 }

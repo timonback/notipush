@@ -3,143 +3,126 @@ package de.timonback.notipush;
 import android.app.Fragment;
 import android.app.FragmentManager;
 import android.os.Bundle;
+import android.support.design.widget.NavigationView;
+import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
-import android.widget.AdapterView;
-import android.widget.ListView;
-import android.widget.RelativeLayout;
-
-import java.lang.reflect.InvocationTargetException;
-import java.util.ArrayList;
 
 import de.timonback.notipush.component.EmptyFragment;
 import de.timonback.notipush.component.notification.NotificationFragment;
 import de.timonback.notipush.component.preference.PreferenceFragment;
-import de.timonback.notipush.util.Utils;
-import de.timonback.notipush.util.drawer.DrawerListAdapter;
-import de.timonback.notipush.util.drawer.NavItem;
 
 public class MainActivity extends AppCompatActivity {
-    private static String TAG = "MainActivity";
+    private static String TAG = MainActivity.class.getSimpleName();
 
-    ListView mDrawerList;
-    RelativeLayout mDrawerPane;
-    ArrayList<NavItem> mNavItems = new ArrayList<>();
-    private ActionBarDrawerToggle mDrawerToggle;
-    private DrawerLayout mDrawerLayout;
+    private DrawerLayout drawer;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        mNavItems.add(new NavItem("Home", "Meetup destination", EmptyFragment.class.getName(), R.drawable.chat_message_arrow));
-        mNavItems.add(new NavItem("Notifications", "View the notifications", NotificationFragment.class.getName(), R.drawable.chat_message_arrow));
-        mNavItems.add(new NavItem("Preferences", "Change your preferences", PreferenceFragment.class.getName(), R.drawable.chat_message_arrow));
-        mNavItems.add(new NavItem("About", "Get to know about us", AboutFragment.class.getName(), R.drawable.chat_message_arrow));
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
 
-        // Populate the Navigtion Drawer with options
-        mDrawerPane = (RelativeLayout) findViewById(R.id.drawerPane);
-        mDrawerList = (ListView) findViewById(R.id.navList);
-        DrawerListAdapter adapter = new DrawerListAdapter(this, mNavItems);
-        mDrawerList.setAdapter(adapter);
+        drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
+                this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
+        drawer.addDrawerListener(toggle);
+        toggle.syncState();
 
-        // Drawer Item click listeners
-        mDrawerList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+        NavigationView leftNavigationView = (NavigationView) findViewById(R.id.nav_left_view);
+        leftNavigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
             @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                selectItemFromDrawer(position);
+            public boolean onNavigationItemSelected(MenuItem item) {
+                // Handle Left navigation view item clicks here.
+                int id = item.getItemId();
+
+                switch (id) {
+                    case R.id.nav_home:
+                        updateMainContent(new EmptyFragment(), "Main");
+                        break;
+                    case R.id.nav_chat:
+                        updateMainContent(new NotificationFragment(), "Notification");
+                        break;
+                    case R.id.nav_preferences:
+                        updateMainContent(new PreferenceFragment(), "Preferences");
+                        break;
+                    case R.id.nav_about:
+                        updateMainContent(new AboutFragment(), "About");
+                        break;
+                    default:
+                        Log.w(TAG, "unhandled navigation id");
+                }
+
+                drawer.closeDrawer(GravityCompat.START);
+                return true;
             }
         });
 
-        // DrawerLayout
-        mDrawerLayout = (DrawerLayout) findViewById(R.id.drawerLayout);
-        mDrawerToggle = new ActionBarDrawerToggle(this, mDrawerLayout, R.string.drawer_open, R.string.drawer_close) {
+        NavigationView rightNavigationView = (NavigationView) findViewById(R.id.nav_right_view);
+        rightNavigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
             @Override
-            public void onDrawerOpened(View drawerView) {
-                super.onDrawerOpened(drawerView);
+            public boolean onNavigationItemSelected(MenuItem item) {
+                // Handle Right navigation view item clicks here.
+                int id = item.getItemId();
 
-                invalidateOptionsMenu();
+                switch (id) {
+                    default:
+                        Log.w(TAG, "unhandled navigation id");
+                }
+
+                drawer.closeDrawer(GravityCompat.END); /*Important Line*/
+                return true;
             }
-
-            @Override
-            public void onDrawerClosed(View drawerView) {
-                super.onDrawerClosed(drawerView);
-                Log.d(TAG, "onDrawerClosed: " + getTitle());
-
-                invalidateOptionsMenu();
-            }
-        };
-
-        mDrawerLayout.addDrawerListener(mDrawerToggle);
-
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        });
     }
 
     @Override
-    protected void onPostCreate(Bundle savedInstanceState) {
-        super.onPostCreate(savedInstanceState);
-        mDrawerToggle.syncState();
+    public void onBackPressed() {
+        if (drawer.isDrawerOpen(GravityCompat.START)) {
+            drawer.closeDrawer(GravityCompat.START);
+        } else if (drawer.isDrawerOpen(GravityCompat.END)) {  /*Closes the Appropriate Drawer*/
+            drawer.closeDrawer(GravityCompat.END);
+        } else {
+            super.onBackPressed();
+        }
     }
 
-    // Called when invalidateOptionsMenu() is invoked
-    public boolean onPrepareOptionsMenu(Menu menu) {
-        // If the nav drawer is open, hide action items related to the content view
-        //boolean drawerOpen = mDrawerLayout.isDrawerOpen(mDrawerList);
-        //menu.findItem(R.id.action_search).setVisible(!drawerOpen);
-        return super.onPrepareOptionsMenu(menu);
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        getMenuInflater().inflate(R.menu.app_bar_main, menu);
+        return true;
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // Pass the event to ActionBarDrawerToggle
-        // If it returns true, then it has handled
-        // the nav drawer indicator touch event
-        if (mDrawerToggle.onOptionsItemSelected(item)) {
+        // Handle action bar item clicks here. The action bar will
+        // automatically handle clicks on the Home/Up button, so long
+        // as you specify a parent activity in AndroidManifest.xml.
+        int id = item.getItemId();
+
+        //noinspection SimplifiableIfStatement
+        if (id == R.id.action_openRight) {
+            drawer.openDrawer(GravityCompat.END);
             return true;
         }
-
-        // Handle your other action bar items...
 
         return super.onOptionsItemSelected(item);
     }
 
-    /*
-    * Called when a particular item from the navigation drawer
-    * is selected.
-    * */
-    private void selectItemFromDrawer(int position) {
-        NavItem item = mNavItems.get(position);
+    private void updateMainContent(Fragment fragment, String title) {
+        FragmentManager fragmentManager = getFragmentManager();
+        fragmentManager.beginTransaction()
+                .replace(R.id.mainContent, fragment)
+                .commit();
 
-        Fragment fragment = null;
-        try {
-            fragment = (Fragment) Utils.instanceClass(item.getClassname());
-
-            FragmentManager fragmentManager = getFragmentManager();
-            fragmentManager.beginTransaction()
-                    .replace(R.id.mainContent, fragment)
-                    .commit();
-
-            mDrawerList.setItemChecked(position, true);
-            setTitle(item.getTitle());
-        } catch (ClassNotFoundException e) {
-            e.printStackTrace();
-        } catch (NoSuchMethodException e) {
-            e.printStackTrace();
-        } catch (InstantiationException e) {
-            e.printStackTrace();
-        } catch (IllegalAccessException e) {
-            e.printStackTrace();
-        } catch (InvocationTargetException e) {
-            e.printStackTrace();
-        }
-
-        // Close the drawer
-        mDrawerLayout.closeDrawer(mDrawerPane);
+        setTitle(title);
     }
 }

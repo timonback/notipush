@@ -21,7 +21,6 @@ import de.timonback.notipush.util.listview.FirebaseRecyclerAdapter;
 public class NotificationFragment extends Fragment {
     private static final String TAG = "RecyclerViewDemo";
 
-    private AuthenticationService mAuthService;
     private DatabaseReference mRef;
     private String currentRef = "chats";
 
@@ -29,6 +28,14 @@ public class NotificationFragment extends Fragment {
     private LinearLayoutManager mManager;
     private FirebaseRecyclerAdapter<Notification, NotificationHolder> mAdapter;
     private TextView mEmptyListMessage;
+
+    private final AuthenticationService.AuthenticationSignedInListener authenticationSignedInListener
+            = new AuthenticationService.AuthenticationSignedInListener() {
+        @Override
+        public void onSignedIn() {
+            reloadNotifications();
+        }
+    };
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -40,12 +47,7 @@ public class NotificationFragment extends Fragment {
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
-        mAuthService = new AuthenticationService(new AuthenticationService.AuthenticationSignedInListener() {
-            @Override
-            public void onSignedIn() {
-                reloadNotifications();
-            }
-        });
+        AuthenticationService.getInstance().addAuthenticationSignedInListener(authenticationSignedInListener);
 
         mRef = FirebaseDatabase.getInstance().getReference();
 
@@ -74,7 +76,7 @@ public class NotificationFragment extends Fragment {
     public void onStart() {
         super.onStart();
 
-        mAuthService.onStart(getActivity());
+        AuthenticationService.getInstance().onStart(getActivity());
     }
 
     @Override
