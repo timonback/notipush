@@ -1,16 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
     <group android:checkableBehavior="single">
-        <item android:title="Account">
+        <item
+            android:id="@+id/nav_right_view_chat_item"
+            android:title="Chats">
             <menu>
+                <group android:id="@+id/nav_right_view_chats">
                 <item
-                    android:id="@+id/nav_settings"
                     android:icon="@drawable/ic_toc"
-                    android:title="Settings" />
-                <item
-                    android:id="@+id/nav_logout"
-                    android:icon="@drawable/ic_toc"
-                    android:title="Logout" />
+                    android:title="Loading...." />
+                </group>
             </menu>
         </item>
 

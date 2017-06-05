@@ -14,12 +14,9 @@ import java.util.List;
 
 public class NotificationService {
     private final static String TAG = NotificationService.class.getName();
-
     private static NotificationService INSTANCE;
-
     private final List<String> topics = new LinkedList<>();
     private DatabaseReference mRef;
-
     private NotificationService() {
         mRef = FirebaseDatabase.getInstance().getReference();
 
@@ -45,6 +42,20 @@ public class NotificationService {
         return INSTANCE;
     }
 
+    public void addChangeListener(final ChangeListener listener) {
+        mRef.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                listener.update();
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                listener.update();
+            }
+        });
+    }
+
     public Query getLastNotifications(String topic, int limit) {
         DatabaseReference mChatRef = mRef.child(topic);
         return mChatRef.limitToLast(limit);
@@ -52,5 +63,9 @@ public class NotificationService {
 
     public List<String> getTopics() {
         return topics;
+    }
+
+    public interface ChangeListener {
+        void update();
     }
 }

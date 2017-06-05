@@ -82,6 +82,19 @@ public class MainActivity extends AppCompatActivity {
                 return true;
             }
         });
+
+        NotificationService.getInstance().addChangeListener(new NotificationService.ChangeListener() {
+            @Override
+            public void update() {
+                NavigationView rightNavigationView = (NavigationView) findViewById(R.id.nav_right_view);
+                Menu rightNavigationChats = rightNavigationView.getMenu().getItem(0).getSubMenu();
+                rightNavigationChats.clear();
+                for (String topic : NotificationService.getInstance().getTopics()) {
+                    MenuItem item = rightNavigationChats.add(R.id.nav_right_view_chats, Menu.NONE, Menu.NONE, topic);
+                    item.setIcon(R.drawable.ic_toc);
+                }
+            }
+        });
     }
 
     @Override
@@ -119,8 +132,6 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void updateMainContent(Fragment fragment, String title) {
-        Log.i(TAG, NotificationService.getInstance().getTopics().toString());
-
         FragmentManager fragmentManager = getFragmentManager();
         fragmentManager.beginTransaction()
                 .replace(R.id.mainContent, fragment)
