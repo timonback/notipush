@@ -30,7 +30,14 @@ public class NotificationFragment extends Fragment {
             = new AuthenticationService.AuthenticationSignedInListener() {
         @Override
         public void onSignedIn() {
-            reloadNotifications();
+            loadNotifications(getCurrentTopic());
+        }
+    };
+    private final NotificationSettings.ChangeListener notificationChangeListener
+            = new NotificationSettings.ChangeListener() {
+        @Override
+        public void topicChanged(String newTopic) {
+            loadNotifications(newTopic);
         }
     };
 
@@ -45,6 +52,7 @@ public class NotificationFragment extends Fragment {
         super.onActivityCreated(savedInstanceState);
 
         AuthenticationService.getInstance().addAuthenticationSignedInListener(authenticationSignedInListener);
+        NotificationSettings.getInstance(getActivity()).addChangeListener(notificationChangeListener);
 
         mEmptyListMessage = (TextView) getActivity().findViewById(R.id.emptyTextView);
 
@@ -60,7 +68,7 @@ public class NotificationFragment extends Fragment {
         mRefresh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                reloadNotifications();
+                loadNotifications(getCurrentTopic());
 
                 mRefresh.setRefreshing(false);
             }
@@ -78,6 +86,7 @@ public class NotificationFragment extends Fragment {
     public void onStop() {
         super.onStop();
 
+        NotificationSettings.getInstance(getActivity()).removeChangeListener(notificationChangeListener);
         AuthenticationService.getInstance().removeAuthenticationSignedInListener(authenticationSignedInListener);
 
         if (mAdapter != null) {
@@ -85,9 +94,12 @@ public class NotificationFragment extends Fragment {
         }
     }
 
-    private void reloadNotifications() {
-        String topic = NotificationSettings.getInstance(getActivity().getApplicationContext()).getCurrentTopic();
+    private void loadNotifications(String topic) {
         Query query = NotificationService.getInstance().getLastNotifications(topic, 50);
+
+        if (mAdapter != null) {
+            mAdapter.cleanup();
+        }
 
         mAdapter = new FirebaseRecyclerAdapter<Notification, NotificationHolder>(
                 Notification.class, R.layout.message, NotificationHolder.class, query) {
@@ -114,5 +126,9 @@ public class NotificationFragment extends Fragment {
         });
 
         mMessages.setAdapter(mAdapter);
+    }
+
+    private String getCurrentTopic() {
+        return NotificationSettings.getInstance(getActivity().getApplicationContext()).getCurrentTopic();
     }
 }

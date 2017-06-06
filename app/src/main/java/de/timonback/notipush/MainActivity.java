@@ -21,6 +21,7 @@ import de.timonback.notipush.service.notification.NotificationSettings;
 
 public class MainActivity extends AppCompatActivity {
     private static final String TAG = MainActivity.class.getSimpleName();
+    private static final String FRAGMENT_ID = "FRAGMENT_ID";
 
     private DrawerLayout drawer;
 
@@ -50,7 +51,8 @@ public class MainActivity extends AppCompatActivity {
                         updateMainContent(new SettingsFragment(), getResources().getString(R.string.nav_home));
                         break;
                     case R.id.nav_chat:
-                        updateMainContent(new NotificationFragment(), getResources().getString(R.string.nav_chat));
+                        String topic = NotificationSettings.getInstance(getApplicationContext()).getCurrentTopic();
+                        updateMainContent(new NotificationFragment(), getResources().getString(R.string.nav_chat) + " - " + topic);
                         break;
                     case R.id.nav_preferences:
                         updateMainContent(new PrefsFragment(), getResources().getString(R.string.nav_preferences));
@@ -76,7 +78,13 @@ public class MainActivity extends AppCompatActivity {
 
                 switch (id) {
                     case R.id.nav_menu_chat:
-                        NotificationSettings.getInstance(getApplicationContext()).setCurrentTopic(item.getTitle().toString());
+                        String topic = item.getTitle().toString();
+                        NotificationSettings.getInstance(getApplicationContext()).setCurrentTopic(topic);
+
+                        if (getFragmentManager().findFragmentByTag(FRAGMENT_ID) instanceof NotificationFragment) {
+                            String title = getResources().getString(R.string.nav_chat) + " - " + topic;
+                            setTitle(title);
+                        }
                         break;
                     default:
                         Log.w(TAG, "unhandled navigation id");
@@ -138,7 +146,7 @@ public class MainActivity extends AppCompatActivity {
     private void updateMainContent(Fragment fragment, String title) {
         FragmentManager fragmentManager = getFragmentManager();
         fragmentManager.beginTransaction()
-                .replace(R.id.mainContent, fragment)
+                .replace(R.id.mainContent, fragment, FRAGMENT_ID)
                 .commit();
 
         setTitle(title);
