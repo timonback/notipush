@@ -14,7 +14,7 @@
     <string name="msg_token_fmt" translatable="false">InstanceID Token: %s</string>
 
     <!-- strings for database demo activities -->
-    <string name="start_chatting">No messages. Start chatting at the bottom!</string>
+    <string name="start_chatting">Loading messages... If there are any.</string>
     <string name="signed_in">Signed In</string>
     <string name="anonymous_auth_failed_msg">Anonymous authentication failed, various components of the demo will not work. Make sure your device is online and that Anonymous Auth is configured in your Firebase project(https://console.firebase.google.com/project/_/authentication/providers)</string>
     <string name="about_app_icon_content_description">App icon</string>

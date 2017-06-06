@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,8 +20,8 @@ import de.timonback.notipush.service.notification.NotificationSettings;
 import de.timonback.notipush.util.listview.FirebaseRecyclerAdapter;
 
 public class NotificationFragment extends Fragment {
-    private static final String TAG = "RecyclerViewDemo";
-
+    public static final String INTENT_CHAT = "intent_chat";
+    private static final String TAG = Notification.class.getName();
     private RecyclerView mMessages;
     private LinearLayoutManager mManager;
     private FirebaseRecyclerAdapter<Notification, NotificationHolder> mAdapter;
@@ -78,6 +79,15 @@ public class NotificationFragment extends Fragment {
     @Override
     public void onStart() {
         super.onStart();
+
+        Bundle extras = getActivity().getIntent().getExtras();
+        if (extras != null) {
+            String intent_topic = extras.getString(INTENT_CHAT);
+            if (intent_topic != null) {
+                Log.i(TAG, "got called with intent for chat " + intent_topic);
+                NotificationSettings.getInstance(getActivity()).setCurrentTopic(intent_topic);
+            }
+        }
 
         AuthenticationService.getInstance().onStart(getActivity());
     }

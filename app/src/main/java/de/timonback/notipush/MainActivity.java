@@ -107,6 +107,11 @@ public class MainActivity extends AppCompatActivity {
                 }
             }
         });
+
+        FragmentManager fragmentManager = getFragmentManager();
+        fragmentManager.beginTransaction()
+                .replace(R.id.mainContent, new NotificationFragment(), FRAGMENT_ID)
+                .commit();
     }
 
     @Override

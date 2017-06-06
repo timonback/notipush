@@ -5,6 +5,7 @@ import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
 
 public class Utils {
 
@@ -56,5 +57,13 @@ public class Utils {
             InvocationTargetException,
             InstantiationException {
         return clazz.newInstance();
+    }
+
+
+    public static <V, K> V getOrDefault(Map<K, V> map, K key, V defaultValue) {
+        if (map.containsKey(key)) {
+            return map.get(key);
+        }
+        return defaultValue;
     }
 }

@@ -15,11 +15,11 @@ import com.firebase.jobdispatcher.Job;
 import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
 
+import de.timonback.notipush.MainActivity;
 import de.timonback.notipush.R;
-import de.timonback.notipush.component.EmptyFragment;
+import de.timonback.notipush.component.notification.NotificationFragment;
 
 public class MessagingService extends FirebaseMessagingService {
-
     private static final String TAG = MessagingService.class.getName();
 
     @Override
@@ -29,26 +29,15 @@ public class MessagingService extends FirebaseMessagingService {
         if (remoteMessage.getData().size() > 0) {
             Log.d(TAG, "Message data payload: " + remoteMessage.getData());
 
-            if (/* Check if data needs to be processed by long running job */ true) {
-                // For long-running tasks (10 seconds or more) use Firebase Job Dispatcher.
-                scheduleJob();
-            } else {
-                // Handle message within 10 seconds
-                handleNow();
-            }
+            // For long-running tasks (10 seconds or more) use Firebase Job Dispatcher.
 
+            Message message = Message.Parser.parse(remoteMessage.getData());
+            displayNotification(message);
         }
 
         if (remoteMessage.getNotification() != null) {
             String body = remoteMessage.getNotification().getBody();
             Log.d(TAG, "Message Notification Body: " + body);
-
-            try {
-                Message message = Message.Parser.parse(body);
-                displayNotification(message);
-            } catch (IllegalArgumentException e) {
-                Log.e(TAG, "Unable to handle notification message in foreground", e);
-            }
         }
     }
 
@@ -61,21 +50,18 @@ public class MessagingService extends FirebaseMessagingService {
         dispatcher.schedule(myJob);
     }
 
-    private void handleNow() {
-        Log.d(TAG, "Short lived task is done.");
-    }
-
     private void displayNotification(Message message) {
-        Intent intent = new Intent(this, EmptyFragment.class);
+        Intent intent = new Intent(this, MainActivity.class);
+        intent.putExtra(NotificationFragment.INTENT_CHAT, message.getCategory());
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         PendingIntent pendingIntent = PendingIntent.getActivity(this, 0 /* Request code */, intent,
                 PendingIntent.FLAG_ONE_SHOT);
 
-        Uri defaultSoundUri= RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
+        Uri defaultSoundUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
         NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(this)
                 .setSmallIcon(R.mipmap.ic_launcher_plain)
                 .setContentTitle(message.getHeader())
-                .setContentText(message.getBody())
+                .setContentText(message.getMessage())
                 .setAutoCancel(true)
                 .setSound(defaultSoundUri)
                 .setContentIntent(pendingIntent);

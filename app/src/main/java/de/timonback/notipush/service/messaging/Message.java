@@ -5,6 +5,10 @@ import android.util.Log;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.Map;
+
+import de.timonback.notipush.util.Utils;
+
 public class Message {
     private final String mMessage;
     private final String mCategory;
@@ -16,7 +20,7 @@ public class Message {
         mCategory = category;
     }
 
-    public String getBody() {
+    public String getMessage() {
         return mMessage;
     }
 
@@ -30,7 +34,7 @@ public class Message {
 
     public static class Parser {
         private static final String TAG = Parser.class.getName();
-        private static final String MESSAGE_PATH_BODY = "body";
+        private static final String MESSAGE_PATH_MESSAGE = "message";
         private static final String MESSAGE_PATH_CATEGORY = "category";
         private static final String MESSAGE_PATH_HEADER = "header";
 
@@ -48,7 +52,15 @@ public class Message {
 
             String header = parseString(obj, MESSAGE_PATH_HEADER, "no header given");
             String category = parseString(obj, MESSAGE_PATH_CATEGORY, "no category given");
-            String message = parseString(obj, MESSAGE_PATH_BODY, "no body given");
+            String message = parseString(obj, MESSAGE_PATH_MESSAGE, "no message given");
+
+            return new Message(header, message, category);
+        }
+
+        public static Message parse(Map<String, String> map) {
+            String header = Utils.getOrDefault(map, MESSAGE_PATH_HEADER, "no header given");
+            String category = Utils.getOrDefault(map, MESSAGE_PATH_CATEGORY, "no category given");
+            String message = Utils.getOrDefault(map, MESSAGE_PATH_MESSAGE, "no message given");
 
             return new Message(header, message, category);
         }
