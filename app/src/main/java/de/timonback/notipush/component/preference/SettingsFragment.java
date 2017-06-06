@@ -17,10 +17,10 @@ import com.google.firebase.messaging.FirebaseMessaging;
 import de.timonback.notipush.R;
 import de.timonback.notipush.component.notification.NotificationFragment;
 
-public class PreferenceFragment extends Fragment {
-    private static final String TAG = "PreferenceFragment";
+public class SettingsFragment extends Fragment {
+    private static final String TAG = "SettingsFragment";
 
-    public PreferenceFragment() {
+    public SettingsFragment() {
         // Required empty public constructor
     }
 

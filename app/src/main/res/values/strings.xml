@@ -26,4 +26,9 @@
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
     <string name="about_messaging">FID</string>
+
+    <string name="nav_home">Home</string>
+    <string name="nav_chat">Chats</string>
+    <string name="nav_preferences">Preferences</string>
+    <string name="nav_about">About</string>
 </resources>

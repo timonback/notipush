@@ -14,7 +14,7 @@ import java.util.List;
 import de.timonback.notipush.util.auth.SignInResultNotifier;
 
 public class AuthenticationService {
-    private static AuthenticationService INSTANCE;
+    private static AuthenticationService instance;
     private final FirebaseAuth mAuth;
     private final List<AuthenticationSignedInListener> listeners = new ArrayList<>();
 
@@ -23,10 +23,10 @@ public class AuthenticationService {
     }
 
     public static synchronized AuthenticationService getInstance() {
-        if (INSTANCE == null) {
-            INSTANCE = new AuthenticationService();
+        if (instance == null) {
+            instance = new AuthenticationService();
         }
-        return INSTANCE;
+        return instance;
     }
 
     public void onStart(Activity activity) {
@@ -68,6 +68,10 @@ public class AuthenticationService {
 
     public void addAuthenticationSignedInListener(AuthenticationSignedInListener listener) {
         listeners.add(listener);
+    }
+
+    public void removeAuthenticationSignedInListener(AuthenticationSignedInListener listener) {
+        listeners.remove(listener);
     }
 
     public void addAuthStateListener(FirebaseAuth.AuthStateListener listener) {

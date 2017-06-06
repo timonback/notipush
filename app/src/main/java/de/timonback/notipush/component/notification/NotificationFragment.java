@@ -15,12 +15,11 @@ import com.google.firebase.database.Query;
 import de.timonback.notipush.R;
 import de.timonback.notipush.service.authentication.AuthenticationService;
 import de.timonback.notipush.service.notification.NotificationService;
+import de.timonback.notipush.service.notification.NotificationSettings;
 import de.timonback.notipush.util.listview.FirebaseRecyclerAdapter;
 
 public class NotificationFragment extends Fragment {
     private static final String TAG = "RecyclerViewDemo";
-
-    private String currentRef = "chats";
 
     private RecyclerView mMessages;
     private LinearLayoutManager mManager;
@@ -78,17 +77,17 @@ public class NotificationFragment extends Fragment {
     @Override
     public void onStop() {
         super.onStop();
+
+        AuthenticationService.getInstance().removeAuthenticationSignedInListener(authenticationSignedInListener);
+
         if (mAdapter != null) {
             mAdapter.cleanup();
         }
     }
 
-    public void setCurrentTopic(String topic) {
-        currentRef = topic;
-    }
-
     private void reloadNotifications() {
-        Query query = NotificationService.getInstance().getLastNotifications(currentRef, 50);
+        String topic = NotificationSettings.getInstance(getActivity().getApplicationContext()).getCurrentTopic();
+        Query query = NotificationService.getInstance().getLastNotifications(topic, 50);
 
         mAdapter = new FirebaseRecyclerAdapter<Notification, NotificationHolder>(
                 Notification.class, R.layout.message, NotificationHolder.class, query) {

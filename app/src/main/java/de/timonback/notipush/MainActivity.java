@@ -13,13 +13,14 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
-import de.timonback.notipush.component.EmptyFragment;
+import de.timonback.notipush.component.PrefsFragment;
 import de.timonback.notipush.component.notification.NotificationFragment;
-import de.timonback.notipush.component.preference.PreferenceFragment;
+import de.timonback.notipush.component.preference.SettingsFragment;
 import de.timonback.notipush.service.notification.NotificationService;
+import de.timonback.notipush.service.notification.NotificationSettings;
 
 public class MainActivity extends AppCompatActivity {
-    private static String TAG = MainActivity.class.getSimpleName();
+    private static final String TAG = MainActivity.class.getSimpleName();
 
     private DrawerLayout drawer;
 
@@ -37,7 +38,7 @@ public class MainActivity extends AppCompatActivity {
         drawer.addDrawerListener(toggle);
         toggle.syncState();
 
-        NavigationView leftNavigationView = (NavigationView) findViewById(R.id.nav_left_view);
+        final NavigationView leftNavigationView = (NavigationView) findViewById(R.id.nav_left_view);
         leftNavigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(MenuItem item) {
@@ -46,16 +47,16 @@ public class MainActivity extends AppCompatActivity {
 
                 switch (id) {
                     case R.id.nav_home:
-                        updateMainContent(new EmptyFragment(), "Main");
+                        updateMainContent(new SettingsFragment(), getResources().getString(R.string.nav_home));
                         break;
                     case R.id.nav_chat:
-                        updateMainContent(new NotificationFragment(), "Notification");
+                        updateMainContent(new NotificationFragment(), getResources().getString(R.string.nav_chat));
                         break;
                     case R.id.nav_preferences:
-                        updateMainContent(new PreferenceFragment(), "Preferences");
+                        updateMainContent(new PrefsFragment(), getResources().getString(R.string.nav_preferences));
                         break;
                     case R.id.nav_about:
-                        updateMainContent(new AboutFragment(), "About");
+                        updateMainContent(new AboutFragment(), getResources().getString(R.string.nav_about));
                         break;
                     default:
                         Log.w(TAG, "unhandled navigation id");
@@ -74,6 +75,9 @@ public class MainActivity extends AppCompatActivity {
                 int id = item.getItemId();
 
                 switch (id) {
+                    case R.id.nav_menu_chat:
+                        NotificationSettings.getInstance(getApplicationContext()).setCurrentTopic(item.getTitle().toString());
+                        break;
                     default:
                         Log.w(TAG, "unhandled navigation id");
                 }
@@ -90,7 +94,7 @@ public class MainActivity extends AppCompatActivity {
                 Menu rightNavigationChats = rightNavigationView.getMenu().getItem(0).getSubMenu();
                 rightNavigationChats.clear();
                 for (String topic : NotificationService.getInstance().getTopics()) {
-                    MenuItem item = rightNavigationChats.add(R.id.nav_right_view_chats, Menu.NONE, Menu.NONE, topic);
+                    MenuItem item = rightNavigationChats.add(R.id.nav_right_view_chats, R.id.nav_menu_chat, Menu.NONE, topic);
                     item.setIcon(R.drawable.ic_toc);
                 }
             }

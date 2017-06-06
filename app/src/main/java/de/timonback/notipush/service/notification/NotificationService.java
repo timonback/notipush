@@ -13,12 +13,15 @@ import java.util.LinkedList;
 import java.util.List;
 
 public class NotificationService {
-    private final static String TAG = NotificationService.class.getName();
-    private static NotificationService INSTANCE;
+    private static final String TAG = NotificationService.class.getName();
+    private static final String FIREBASE_ROOT = "notification";
+
+    private static NotificationService instance;
     private final List<String> topics = new LinkedList<>();
     private DatabaseReference mRef;
+
     private NotificationService() {
-        mRef = FirebaseDatabase.getInstance().getReference();
+        mRef = FirebaseDatabase.getInstance().getReference().child(FIREBASE_ROOT);
 
         mRef.addValueEventListener(new ValueEventListener() {
             @Override
@@ -36,10 +39,10 @@ public class NotificationService {
     }
 
     public static synchronized NotificationService getInstance() {
-        if (INSTANCE == null) {
-            INSTANCE = new NotificationService();
+        if (instance == null) {
+            instance = new NotificationService();
         }
-        return INSTANCE;
+        return instance;
     }
 
     public void addChangeListener(final ChangeListener listener) {

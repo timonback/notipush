@@ -5,11 +5,11 @@
         <item
             android:id="@+id/nav_home"
             android:icon="@drawable/ic_toc"
-            android:title="Home" />
+            android:title="@string/nav_home" />
         <item
             android:id="@+id/nav_chat"
             android:icon="@drawable/ic_toc"
-            android:title="Chats" />
+            android:title="@string/nav_chat" />
     </group>
 
     <item android:title="Preferences">
@@ -17,11 +17,11 @@
             <item
                 android:id="@+id/nav_preferences"
                 android:icon="@drawable/ic_toc"
-                android:title="Preferences" />
+                android:title="@string/nav_preferences" />
             <item
                 android:id="@+id/nav_about"
                 android:icon="@drawable/ic_toc"
-                android:title="About" />
+                android:title="@string/nav_about" />
         </menu>
     </item>
 
