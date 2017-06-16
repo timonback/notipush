@@ -15,20 +15,18 @@ dependencies:
 
 test:
     override:
-        # Disable incremental dexing on all gradle commands to speed up clean builds
-        # https://sites.google.com/a/android.com/tools/tech-docs/new-build-system/2-5-alpha-gradle-plugin/trying-gradle-plugin-2-5
-        - ./gradlew checkstyle -Pandroid.useDexArchive=false
-        - ./gradlew lintDebug -Pandroid.useDexArchive=false
-        - ./gradlew testDebugUnitTest -Pandroid.useDexArchive=false
+        - ./gradlew clean assembleDebug -Dpre-dex=false
+        - ./gradlew test
+        - ./gradlew lint
 
         # start the emulator
-        - emulator -avd circleci-android25 -no-window:
-            background: true
-            parallel: true
+        #- emulator -avd circleci-android25 -no-window:
+        #    background: true
+        #    parallel: true
         # wait for it to have booted
-        - circle-android wait-for-boot
+        #- circle-android wait-for-boot
         # run tests  against the emulator.
-        - ./gradlew connectedAndroidTest --console=plain -Pandroid.useDexArchive=false;
+        #- ./gradlew connectedAndroidTest --console=plain -Pandroid.useDexArchive=false;
 
         # copy the build outputs to artifacts
         - cp -r app/build/outputs $CIRCLE_ARTIFACTS
