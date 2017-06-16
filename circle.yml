@@ -8,7 +8,7 @@ machine:
 
 dependencies:
     pre:
-        - echo y | android update sdk --no-ui --all --filter "android-25","build-tools-25.0.3","extra-android-m2repository", "extra-android-support"
+        - echo y | android update sdk --no-ui --all --filter "android-25","build-tools-25.0.3","extra-android-m2repository","extra-android-support"
         # https://discuss.circleci.com/t/constraintlayout-1-0-2/11112
         - echo y | $ANDROID_HOME/tools/bin/sdkmanager "extras;m2repository;com;android;support;constraint;constraint-layout-solver;1.0.2"
 
