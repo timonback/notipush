@@ -33,6 +33,7 @@ dependencies {
     compile firebaseDependencies.auth
     compile firebaseDependencies.database
     compile firebaseDependencies.messaging
+    compile 'com.firebase:firebase-jobdispatcher:0.5.2'
 
     testCompile 'junit:junit:4.12'
 }
