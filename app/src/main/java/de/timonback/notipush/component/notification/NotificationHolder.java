@@ -70,7 +70,7 @@ public class NotificationHolder extends RecyclerView.ViewHolder {
     public void setDate(String date) {
         String text = "Date unknown";
         if (date != null) {
-            text = sdf.format(new Date(Long.valueOf(date)));
+            text = sdf.format(new Date(Long.valueOf(date) * 1000));
         }
         mNameField.setText(text);
     }
