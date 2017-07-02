@@ -30,10 +30,10 @@ public class AboutFragment extends Fragment {
     public static Pair<String, Integer> getAppVersionAndBuild(Context context) {
         try {
             PackageInfo pInfo = context.getPackageManager().getPackageInfo(context.getPackageName(), 0);
-            return new Pair<String, Integer>(pInfo.versionName, pInfo.versionCode);
+            return new Pair(pInfo.versionName, pInfo.versionCode);
         } catch (Exception e) {
             Log.e(TAG, "Could not get version number");
-            return new Pair<String, Integer>("", 0);
+            return new Pair("", 0);
         }
     }
 
@@ -72,8 +72,8 @@ public class AboutFragment extends Fragment {
         AuthenticationService.getInstance().getCurrentUser().getToken(false).addOnCompleteListener(getActivity(), new OnCompleteListener<GetTokenResult>() {
             @Override
             public void onComplete(@NonNull Task<GetTokenResult> task) {
-                TextView messaging_id = (TextView) rootView.findViewById(R.id.about_messaging);
-                messaging_id.setText(task.getResult().getToken());
+                TextView messagingId = (TextView) rootView.findViewById(R.id.about_messaging);
+                messagingId.setText(task.getResult().getToken());
             }
         });
 

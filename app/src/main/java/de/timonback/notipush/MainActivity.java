@@ -14,8 +14,10 @@ import android.view.Menu;
 import android.view.MenuItem;
 
 import de.timonback.notipush.component.PrefsFragment;
+import de.timonback.notipush.component.SubscriptionFragment;
 import de.timonback.notipush.component.notification.NotificationFragment;
 import de.timonback.notipush.component.preference.SettingsFragment;
+import de.timonback.notipush.service.ChangeListener;
 import de.timonback.notipush.service.notification.NotificationService;
 import de.timonback.notipush.service.notification.NotificationSettings;
 
@@ -53,6 +55,9 @@ public class MainActivity extends AppCompatActivity {
                     case R.id.nav_chat:
                         String topic = NotificationSettings.getInstance(getApplicationContext()).getCurrentTopic();
                         updateMainContent(new NotificationFragment(), getResources().getString(R.string.nav_chat) + " - " + topic);
+                        break;
+                    case R.id.nav_subscription:
+                        updateMainContent(new SubscriptionFragment(), getResources().getString(R.string.nav_subscription));
                         break;
                     case R.id.nav_preferences:
                         updateMainContent(new PrefsFragment(), getResources().getString(R.string.nav_preferences));
@@ -95,7 +100,7 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        NotificationService.getInstance().addChangeListener(new NotificationService.ChangeListener() {
+        NotificationService.getInstance().addChangeListener(new ChangeListener() {
             @Override
             public void update() {
                 NavigationView rightNavigationView = (NavigationView) findViewById(R.id.nav_right_view);

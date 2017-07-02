@@ -19,6 +19,10 @@
                 android:icon="@drawable/ic_toc"
                 android:title="@string/nav_preferences" />
             <item
+                android:id="@+id/nav_subscription"
+                android:icon="@drawable/ic_toc"
+                android:title="@string/nav_subscription" />
+            <item
                 android:id="@+id/nav_about"
                 android:icon="@drawable/ic_toc"
                 android:title="@string/nav_about" />

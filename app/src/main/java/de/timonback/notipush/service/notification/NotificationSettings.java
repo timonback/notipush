@@ -3,15 +3,20 @@ package de.timonback.notipush.service.notification;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
+import android.util.Log;
 
 import java.util.LinkedList;
 import java.util.List;
 
+import de.timonback.notipush.component.notification.Notification;
+
 public class NotificationSettings {
+    private static final String TAG = Notification.class.getName();
     private static final String NOTIFICATION_TOPIC = "pref_notification_topic";
     private static NotificationSettings instance;
     private Context mContext;
     private List<NotificationSettings.ChangeListener> listeners = new LinkedList<>();
+
     private NotificationSettings(Context context) {
         mContext = context;
 
@@ -26,6 +31,9 @@ public class NotificationSettings {
                             for (ChangeListener listener : listeners) {
                                 listener.topicChanged(newValue);
                             }
+                            break;
+                        default:
+                            Log.w(TAG, "unhandled switch case: "+key);
                     }
                 }
             }

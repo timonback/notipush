@@ -42,7 +42,7 @@ public class Message {
             //private
         }
 
-        public static Message parse(String json) throws IllegalArgumentException {
+        public static Message parse(String json) {
             JSONObject obj = null;
             try {
                 obj = new JSONObject(json);

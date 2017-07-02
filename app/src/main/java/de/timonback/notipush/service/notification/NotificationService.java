@@ -12,6 +12,8 @@ import com.google.firebase.database.ValueEventListener;
 import java.util.LinkedList;
 import java.util.List;
 
+import de.timonback.notipush.service.ChangeListener;
+
 public class NotificationService {
     private static final String TAG = NotificationService.class.getName();
     private static final String FIREBASE_ROOT = "notification";
@@ -66,9 +68,5 @@ public class NotificationService {
 
     public List<String> getTopics() {
         return topics;
-    }
-
-    public interface ChangeListener {
-        void update();
     }
 }
