@@ -8,7 +8,7 @@
                 <group android:id="@+id/nav_right_view_chats">
                 <item
                     android:id="@+id/nav_menu_chat"
-                    android:icon="@drawable/ic_toc"
+                    android:icon="@drawable/ic_message"
                     android:title="Loading...." />
                 </group>
             </menu>

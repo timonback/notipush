@@ -33,7 +33,7 @@ public class EmptyFragment extends Fragment {
         }*/
         // [END handle_data_extras]
 
-        return inflater.inflate(R.layout.activity_mainold, container, false);
+        return inflater.inflate(R.layout.fragment_main, container, false);
     }
 
 }

@@ -16,7 +16,6 @@ import android.view.MenuItem;
 import de.timonback.notipush.component.PrefsFragment;
 import de.timonback.notipush.component.SubscriptionFragment;
 import de.timonback.notipush.component.notification.NotificationFragment;
-import de.timonback.notipush.component.preference.SettingsFragment;
 import de.timonback.notipush.service.ChangeListener;
 import de.timonback.notipush.service.notification.NotificationService;
 import de.timonback.notipush.service.notification.NotificationSettings;
@@ -50,7 +49,7 @@ public class MainActivity extends AppCompatActivity {
 
                 switch (id) {
                     case R.id.nav_home:
-                        updateMainContent(new SettingsFragment(), getResources().getString(R.string.nav_home));
+                        updateMainContent(new MainFragement(), getResources().getString(R.string.nav_home));
                         break;
                     case R.id.nav_chat:
                         String topic = NotificationSettings.getInstance(getApplicationContext()).getCurrentTopic();
@@ -108,14 +107,14 @@ public class MainActivity extends AppCompatActivity {
                 rightNavigationChats.clear();
                 for (String topic : NotificationService.getInstance().getTopics()) {
                     MenuItem item = rightNavigationChats.add(R.id.nav_right_view_chats, R.id.nav_menu_chat, Menu.NONE, topic);
-                    item.setIcon(R.drawable.ic_toc);
+                    item.setIcon(R.drawable.ic_message);
                 }
             }
         });
 
         FragmentManager fragmentManager = getFragmentManager();
         fragmentManager.beginTransaction()
-                .replace(R.id.mainContent, new NotificationFragment(), FRAGMENT_ID)
+                .replace(R.id.mainContent, new MainFragement(), FRAGMENT_ID)
                 .commit();
     }
 
