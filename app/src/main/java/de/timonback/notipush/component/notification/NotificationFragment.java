@@ -82,10 +82,10 @@ public class NotificationFragment extends Fragment {
 
         Bundle extras = getActivity().getIntent().getExtras();
         if (extras != null) {
-            String intent_topic = extras.getString(INTENT_CHAT);
-            if (intent_topic != null) {
-                Log.i(TAG, "got called with intent for chat " + intent_topic);
-                NotificationSettings.getInstance(getActivity()).setCurrentTopic(intent_topic);
+            String intentTopic = extras.getString(INTENT_CHAT);
+            if (intentTopic != null) {
+                Log.i(TAG, "got called with intent for chat " + intentTopic);
+                NotificationSettings.getInstance(getActivity()).setCurrentTopic(intentTopic);
             }
         }
 
@@ -105,12 +105,9 @@ public class NotificationFragment extends Fragment {
     }
 
     private void loadNotifications(String topic) {
+        FirebaseRecyclerAdapter<Notification, NotificationHolder> oldAdapter = mAdapter;
+
         Query query = NotificationService.getInstance().getLastNotifications(topic, 50);
-
-        if (mAdapter != null) {
-            mAdapter.cleanup();
-        }
-
         mAdapter = new FirebaseRecyclerAdapter<Notification, NotificationHolder>(
                 Notification.class, R.layout.message, NotificationHolder.class, query) {
             @Override
@@ -126,6 +123,7 @@ public class NotificationFragment extends Fragment {
                 mEmptyListMessage.setVisibility(mAdapter.getItemCount() == 0 ? View.VISIBLE : View.GONE);
             }
         };
+        mMessages.setAdapter(mAdapter);
 
         // Scroll to bottom on new messages
         mAdapter.registerAdapterDataObserver(new RecyclerView.AdapterDataObserver() {
@@ -135,7 +133,10 @@ public class NotificationFragment extends Fragment {
             }
         });
 
-        mMessages.setAdapter(mAdapter);
+
+        if (oldAdapter != null) {
+            oldAdapter.cleanup();
+        }
     }
 
     private String getCurrentTopic() {
