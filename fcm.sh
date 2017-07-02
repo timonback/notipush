@@ -38,7 +38,7 @@ curl -X POST \
   --header "Authorization: key=$API_KEY" \
   --Header "Content-Type: application/json" \
   https://fcm.googleapis.com/fcm/send \
-  -d "{\"to\":\"$TO\",\"notificationREMOVED\":{\"body\":\"Show this notification directly, no processing in the app\"},\"data\":{\"header\":\"Yellow\",\"category\":\"$TOPIC\", \"message\":\"$MESSAGE\"},\"priority\":10}"
+  -d "{\"to\":\"$TO\",\"notificationREMOVED\":{\"body\":\"Show this notification directly, no processing in the app\"},\"data\":{\"header\":\"$AUTHOR\",\"category\":\"$TOPIC\", \"message\":\"$MESSAGE\"},\"priority\":10}"
 
 # persist data also in the database
 curl -X POST \
