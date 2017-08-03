@@ -28,3 +28,37 @@ jobs:
           destination: reports
       - store_test_results:
           path: app/build/test-results
+
+  docs:
+    docker:
+      - image: felicianotech/docker-hugo:latest
+    working_directory: ~/project
+    steps:
+      - checkout
+      - run:
+          name: "Run Hugo"
+          command: HUGO_ENV=production hugo -v -s ~/project/docs-src/ --destination ~/project/docs
+      - run:
+          name: "Test Website"
+          command: htmlproofer ~/project/docs --allow-hash-href --check-html --empty-alt-ignore
+      - add_ssh_keys
+      - deploy:
+          command: |
+            git config --global user.email "docs-bot@circleci.timonback.de"
+            git config --global user.name "Docs Bot"
+            git checkout -b docs
+            git add ~/project/docs
+            git commit -m "rebuilding docs on `date`"
+            git push origin docs
+
+workflows:
+  version: 2
+  build-and-docs:
+    jobs:
+      - build
+      - docs:
+          requires:
+            - build
+          filters:
+            branches:
+              only: update/docs

@@ -24,5 +24,8 @@ Notipush is an android application that allows to receive instant push notificat
     3. Run the script
     4. Check your phone and see the notification
 
+## Docs
+All updates for the docs have to added to the update/docs branch.
+
 ## Disclaimer
 All notification that are sent are publicly accessable with the used Firebase *rules*. Be careful about what you share.
