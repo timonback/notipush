@@ -1,8 +1,10 @@
-baseURL = "http://example.org/"
+baseURL = "/"
 languageCode = "en-us"
-title = "My New Hugo Site"
+DefaultContentLanguage = "en"
 
+title = "Docdock"
 theme = "hugo-theme-docdock"
+themesdir = "../.."
 
 [params]
 editURL = "https://github.com/vjeantet/hugo-theme-docdock/edit/master/exampleSite/content/"
@@ -21,21 +23,21 @@ home = [ "HTML", "RSS", "JSON"]
 pre = "<h3>More</h3>"
 name = "<i class='fa fa-github'></i> Github repo"
 identifier = "ds"
-url = "https://github.com/timonback/notipush"
+url = "https://github.com/vjeantet/hugo-theme-docdock"
 weight = 10
 
-#[[menu.shortcuts]]
-#name = "<i class='fa fa-camera'></i> Showcases"
-#url = "/showcase"
-#weight = 11
+[[menu.shortcuts]]
+name = "<i class='fa fa-camera'></i> Showcases"
+url = "/showcase"
+weight = 11
 
-#[[menu.shortcuts]]
-#name = "<i class='fa fa-bookmark'></i> Hugo Documentation"
-#identifier = "hugodoc"
-#url = "https://gohugo.io/"
-#weight = 20
+[[menu.shortcuts]]
+name = "<i class='fa fa-bookmark'></i> Hugo Documentation"
+identifier = "hugodoc"
+url = "https://gohugo.io/"
+weight = 20
 
-#[[menu.shortcuts]]
-#name = "<i class='fa fa-bullhorn'></i> Credits"
-#url = "/credits"
-#weight = 30
+[[menu.shortcuts]]
+name = "<i class='fa fa-bullhorn'></i> Credits"
+url = "/credits"
+weight = 30
